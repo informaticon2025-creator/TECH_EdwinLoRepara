@@ -1,0 +1,4 @@
+Título: Ejemplo de publicación
+Categoría: Móviles
+Imagen: ./flash.jpg
+Descripción: Contenido de muestra para ver el diseño de la ficha. Reemplaza este texto por los detalles de una reparación real.
