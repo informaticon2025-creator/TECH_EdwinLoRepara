@@ -30,9 +30,35 @@
         body {
             margin: 0;
             color: var(--ink);
-            background: var(--paper);
+            background:
+                radial-gradient(circle at top, rgba(241, 90, 36, 0.12), transparent 20%),
+                linear-gradient(180deg, #f5f4f1 0%, #eceae4 100%);
             font-family: var(--body-font);
             -webkit-font-smoothing: antialiased;
+        }
+        body::before,
+        body::after {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            border-radius: 50%;
+            filter: blur(52px);
+            content: "";
+            opacity: 0.35;
+        }
+        body::before {
+            top: 8%;
+            left: 4%;
+            width: 220px;
+            height: 220px;
+            background: rgba(241, 90, 36, 0.28);
+        }
+        body::after {
+            right: 8%;
+            bottom: 18%;
+            width: 260px;
+            height: 260px;
+            background: rgba(255, 181, 111, 0.18);
         }
         a { color: inherit; }
         a:focus-visible { outline: 3px solid var(--orange); outline-offset: 4px; }
@@ -40,12 +66,14 @@
 
         .topbar {
             position: relative;
-            z-index: 1;
+            z-index: 20;
             color: var(--white);
-            background: var(--ink);
-            border-bottom: 1px solid #30332e;
+            background: linear-gradient(180deg, rgba(17,19,15,0.98), rgba(21,24,19,0.98));
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 12px 26px rgba(0,0,0,0.12);
         }
         .nav {
+            position: relative;
             display: flex;
             min-height: 76px;
             align-items: center;
@@ -66,6 +94,26 @@
         }
         .brand-logo { display: block; width: 28px; height: 28px; flex: 0 0 auto; }
         .nav-links { display: flex; align-items: center; gap: 30px; }
+        .menu-toggle {
+            display: none;
+            width: 44px;
+            height: 44px;
+            flex: 0 0 auto;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            background: transparent;
+            color: var(--white);
+            cursor: pointer;
+        }
+        .menu-toggle span { display: block; width: 20px; height: 2px; border-radius: 2px; background: currentColor; transition: transform 180ms ease, opacity 180ms ease; }
+        .menu-toggle[aria-expanded="true"] span:first-child { transform: translateY(7px) rotate(45deg); }
+        .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+        .menu-toggle[aria-expanded="true"] span:last-child { transform: translateY(-7px) rotate(-45deg); }
+        .menu-toggle:focus-visible { outline: 2px solid var(--orange); outline-offset: 3px; }
         .nav-links a:not(.nav-cta) {
             color: #dedfdb;
             font-size: 14px;
@@ -78,34 +126,74 @@
             align-items: center;
             justify-content: center;
             padding: 0 20px;
-            border: 1px solid var(--orange);
-            background: var(--orange);
+            border: 1px solid rgba(241, 90, 36, 0.8);
+            background: linear-gradient(135deg, var(--orange) 0%, #ff8959 100%);
             color: var(--white);
             font-size: 14px;
             font-weight: 700;
             text-decoration: none;
-            transition: background-color 160ms ease, border-color 160ms ease, transform 160ms ease;
+            border-radius: 14px;
+            box-shadow: 0 18px 28px rgba(241, 90, 36, 0.18);
+            transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+            position: relative;
+            overflow: hidden;
         }
-        .nav-cta:hover, .button:hover { transform: translateY(-2px); background: var(--orange-dark); border-color: var(--orange-dark); }
-        .button--outline { background: transparent; border-color: #656861; color: var(--white); }
-        .button--outline:hover { background: #282b26; border-color: #989b94; }
+        .nav-cta {
+            letter-spacing: 0.04em;
+        }
+        .nav-cta::before, .button::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.22) 40%, transparent 100%);
+            transform: translateX(-120%);
+            transition: transform 260ms ease;
+        }
+        .nav-cta:hover, .button:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 20px 34px rgba(241, 90, 36, 0.22);
+            filter: saturate(1.06);
+        }
+        .nav-cta:hover::before, .button:hover::before { transform: translateX(120%); }
+        .button--outline {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.22);
+            color: var(--white);
+            box-shadow: none;
+        }
+        .button--outline:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.4); }
 
         .hero {
             position: relative;
             overflow: hidden;
             color: var(--white);
-            background-color: var(--ink);
-            background-image: linear-gradient(#ffffff08 1px, transparent 1px), linear-gradient(90deg, #ffffff08 1px, transparent 1px);
-            background-size: 42px 42px;
+            background:
+                radial-gradient(circle at 15% 15%, rgba(241, 90, 36, 0.18), transparent 20%),
+                linear-gradient(120deg, #0d0f0d 0%, #121611 38%, #171a15 100%);
+            border-bottom: 1px solid rgba(255,255,255,0.08);
         }
         .hero::before {
+            position: absolute;
+            inset: 0;
+            background-image: linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 38px 38px;
+            content: "";
+            opacity: 0.8;
+            z-index: 0;
+        }
+        .hero::after {
             position: absolute;
             right: 0;
             bottom: 0;
             left: 0;
             height: 5px;
-            background: var(--orange);
+            background: linear-gradient(90deg, var(--orange) 0%, #ffb26d 50%, var(--orange) 100%);
             content: "";
+            z-index: 0;
+        }
+        .hero-copy {
+            position: relative;
+            z-index: 1;
         }
         .hero-inner {
             display: grid;
@@ -128,7 +216,7 @@
             color: #d2d4ce;
             font-size: 12px;
             font-weight: 700;
-            letter-spacing: 0;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
         }
         .eyebrow::before { width: 26px; height: 2px; background: var(--orange); content: ""; }
@@ -141,45 +229,66 @@
             font-weight: 800;
             line-height: .88;
             text-transform: uppercase;
+            letter-spacing: -0.04em;
+            animation: slideUp 750ms ease both;
         }
         h1 span { color: var(--orange); }
-        .hero-description { max-width: 620px; margin-bottom: 27px; color: #c3c5bf; font-size: 17px; line-height: 1.7; }
-        .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; }
-        .hero-note { margin: 18px 0 0; color: #a8aaa4; font-size: 13px; }
-        .hero-note strong { color: var(--white); font-weight: 600; }
+        .hero-description { max-width: 620px; margin-bottom: 27px; color: #c3c5bf; font-size: 17px; line-height: 1.7; animation: fadeUp 850ms ease 120ms both; }
+        .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; animation: fadeUp 900ms ease 180ms both; }
         .hero-photos {
             position: relative;
             width: 100%;
-            max-width: 350px;
+            max-width: 360px;
             aspect-ratio: 1 / 1.12;
             justify-self: end;
+            animation: float 6s ease-in-out infinite;
+            z-index: 1;
+            margin-right: 12px;
         }
         .hero-photo {
             position: absolute;
             display: block;
             aspect-ratio: 1;
             overflow: hidden;
-            border: 1px solid var(--orange);
+            border: 2px solid rgba(241, 90, 36, 0.9);
             border-radius: 100%;
             background-image: url("flash.jpg");
             background-repeat: no-repeat;
-            box-shadow: 0 8px 24px #0006;
+            box-shadow: 0 18px 35px rgba(0,0,0,0.35);
+            transform: translateZ(0);
+            filter: saturate(1.08);
+        }
+        .hero-photo::before {
+            position: absolute;
+            inset: -12%;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.14);
+            content: "";
         }
         .hero-photo--large {
             top: 0;
             left: 0;
-            width: 76%;
+            width: 96%;
+            height: 96%;
             background-size: 283.5% auto;
             background-position: 24.8% 23.7%;
+            box-shadow: 0 22px 42px rgba(0,0,0,0.45);
         }
         .hero-photo--medium {
             right: 0;
             bottom: 0;
-            width: 58%;
+            width: 70%;
+            height: 70%;
             background-size: 337.5% auto;
             background-position: 85.5% 47.3%;
+            box-shadow: 0 22px 38px rgba(0,0,0,0.4);
         }
-        .device-strip { color: var(--white); background: var(--orange); }
+        .device-strip {
+            color: var(--white);
+            background: linear-gradient(135deg, #f15a24 0%, #d54a1d 100%);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.16), 0 -8px 18px rgba(0,0,0,0.05);
+            animation: pulseGlow 4.8s ease-in-out infinite;
+        }
         .device-list {
             display: grid;
             min-height: 104px;
@@ -203,18 +312,39 @@
             justify-content: center;
             padding: 10px 8px;
             border: 0;
-            border-right: 1px solid #ffffff55;
+            border-right: 1px solid rgba(255,255,255,0.35);
             background: transparent;
             color: inherit;
             cursor: pointer;
             font: 700 23px var(--display-font);
             text-align: center;
             text-transform: uppercase;
-            transition: background-color 150ms ease;
+            transition: background-color 150ms ease, transform 150ms ease;
+            letter-spacing: 0.03em;
         }
-        .device-option:hover, .device-option:focus-visible { background: #c94419; }
+        .device-option:hover, .device-option:focus-visible {
+            background: rgba(255,255,255,0.08);
+            transform: translateY(-1px);
+        }
         .device-option:last-child { border: 0; }
         .device-option:focus-visible { outline: 2px solid var(--white); outline-offset: -4px; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(22px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 0 rgba(241, 90, 36, 0.1); }
+            50% { box-shadow: 0 0 28px rgba(241, 90, 36, 0.28); }
+        }
 
         .repairs-dialog {
             width: min(880px, calc(100vw - 32px));
@@ -264,6 +394,95 @@
         .gallery-empty { display: grid; justify-items: center; gap: 14px; max-width: 390px; margin: 0 auto; padding: 12px 0 20px; text-align: center; }
         .gallery-empty img { width: min(220px, 70%); border: 1px solid var(--orange); }
         .gallery-empty p { margin: 0; color: #555950; font-size: 14px; line-height: 1.6; }
+        .gallery-status { margin: 0; color: #555950; font-size: 14px; line-height: 1.6; }
+
+        .social-trigger {
+            position: fixed;
+            top: 18px;
+            right: 18px;
+            z-index: 11;
+            display: inline-flex;
+            min-height: 46px;
+            align-items: center;
+            gap: 9px;
+            padding: 0 15px;
+            border: 0;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--orange), #d94a1a);
+            box-shadow: 0 10px 28px rgba(0,0,0,.28), 0 0 24px rgba(241,90,36,.2);
+            color: var(--white);
+            cursor: pointer;
+            font: 700 12px var(--body-font);
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            transform: none;
+            transition: transform 180ms ease, box-shadow 180ms ease;
+        }
+        .social-trigger:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(0,0,0,.34), 0 0 28px rgba(241,90,36,.3); }
+        .social-trigger .ui-icon { width: 18px; height: 18px; color: currentColor; }
+        .social-dialog {
+            position: fixed;
+            top: 70px;
+            right: 18px;
+            left: auto;
+            width: min(330px, calc(100vw - 32px));
+            max-width: none;
+            max-height: min(82dvh, 560px);
+            margin: 0;
+            padding: 0;
+            overflow: hidden auto;
+            border: 1px solid rgba(255,255,255,.13);
+            border-radius: 18px;
+            background:
+                radial-gradient(circle at 100% 0, rgba(241,90,36,.13), transparent 38%),
+                linear-gradient(155deg, #20231e 0%, #11130f 78%);
+            box-shadow: 0 28px 90px rgba(0,0,0,.55), inset 0 1px rgba(255,255,255,.06);
+            color: var(--white);
+            transform: none;
+        }
+        .social-dialog[open] { animation: social-dialog-in 220ms cubic-bezier(.2,.8,.2,1) both; }
+        .social-dialog::backdrop { background: rgba(5,7,5,.62); backdrop-filter: blur(4px); }
+        .social-dialog-inner { padding: 24px; }
+        .social-dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 20px; }
+        .social-kicker { margin: 0 0 6px; color: #c3c5bf; font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; }
+        .social-dialog h2 { margin: 0; color: var(--white); font-size: 34px; }
+        .social-close {
+            display: grid;
+            width: 40px;
+            height: 40px;
+            flex: 0 0 auto;
+            place-items: center;
+            border: 1px solid rgba(255,255,255,.17);
+            border-radius: 50%;
+            background: rgba(255,255,255,.04);
+            color: var(--white);
+            cursor: pointer;
+            transition: background 160ms ease, border-color 160ms ease;
+        }
+        .social-close:hover { border-color: var(--orange); background: rgba(241,90,36,.12); }
+        .social-list { display: grid; gap: 10px; }
+        .social-link {
+            display: flex;
+            min-height: 58px;
+            align-items: center;
+            gap: 14px;
+            padding: 10px 14px;
+            border: 1px solid rgba(255,255,255,.1);
+            border-radius: 12px;
+            background: rgba(255,255,255,.035);
+            color: var(--white);
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 170ms ease, background 170ms ease, border-color 170ms ease;
+        }
+        .social-link:hover, .social-link:focus-visible { transform: translateX(3px); border-color: rgba(241,90,36,.6); background: rgba(241,90,36,.1); }
+        .social-link svg { width: 22px; height: 22px; flex: 0 0 auto; color: var(--orange); fill: currentColor; }
+        .social-link--instagram svg { fill: none; stroke: currentColor; stroke-width: 1.8; }
+        @keyframes social-dialog-in {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .services { padding-block: 100px 108px; }
         .section-head { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 42px; }
@@ -287,6 +506,12 @@
             border-bottom: 1px solid #bfc2ba;
             font-size: 16px;
             font-weight: 600;
+            transition: transform 180ms ease, background-color 180ms ease, border-color 180ms ease;
+        }
+        .service-item:hover {
+            transform: translateY(-2px);
+            background: rgba(241, 90, 36, 0.03);
+            border-color: rgba(241, 90, 36, 0.4);
         }
         .service-number { color: var(--orange-dark); font-family: var(--display-font); font-size: 19px; font-weight: 700; }
         .icon-library { position: absolute; width: 0; height: 0; overflow: hidden; }
@@ -297,7 +522,7 @@
             position: relative;
             overflow: hidden;
             color: var(--white);
-            background: var(--ink-soft);
+            background: linear-gradient(135deg, #181918 0%, #1d211b 100%);
         }
         .contact::after {
             position: absolute;
@@ -312,6 +537,7 @@
         .contact .eyebrow { color: #c6c8c2; }
         .contact h2 { max-width: 500px; margin-bottom: 16px; }
         .contact-copy > p:not(.eyebrow) { max-width: 430px; margin-bottom: 0; color: #c3c5bf; font-size: 15px; line-height: 1.7; }
+        .contact-row:hover { background: rgba(255,255,255,0.02); }
         .contact-details { display: grid; align-content: center; gap: 18px; }
         .contact-row { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 16px; padding-bottom: 18px; border-bottom: 1px solid #41443e; }
         .contact-label { display: flex; align-items: center; gap: 7px; color: #a8aaa4; font-size: 13px; }
@@ -323,54 +549,81 @@
         .footer-inner { display: flex; justify-content: space-between; gap: 20px; }
         .footer-inner p { margin: 0; }
         .mobile-home { display: contents; }
-        .mobile-tabs { display: none; }
-        .contact-prompt {
-            position: fixed;
-            right: 24px;
-            bottom: 24px;
-            z-index: 10;
-            width: min(380px, calc(100vw - 32px));
-            padding: 22px 52px 22px 22px;
-            border-left: 5px solid var(--orange);
-            background: var(--ink-soft);
-            box-shadow: 0 12px 40px #0005;
-            color: var(--white);
-            animation: prompt-in 220ms ease-out both;
+        .nav-links .device-strip { display: none; }
+        .mobile-home > .device-strip .device-menu-title { display: none; }
+        .menu-backdrop { display: none; }
+        @media (min-width: 761px) {
+            html { scroll-padding-top: 77px; }
+            .topbar { position: fixed; inset: 0 0 auto; }
+            .app-stage { margin-top: 77px; }
+            .social-trigger { top: 89px; }
+            .social-dialog { top: 141px; }
+            .social-trigger { z-index: 30; }
         }
-        .contact-prompt[hidden] { display: none; }
-        .contact-prompt h2 { margin: 0 0 7px; font-family: var(--display-font); font-size: 27px; line-height: 1; }
-        .contact-prompt p { margin: 0 0 14px; color: #c3c5bf; font-size: 14px; line-height: 1.5; }
-        .contact-prompt .button { min-height: 40px; padding-inline: 14px; font-size: 13px; }
-        .prompt-close {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            min-width: 44px;
-            min-height: 44px;
-            padding: 0 6px;
-            border: 0;
-            background: transparent;
-            color: #c3c5bf;
-            font: 600 12px var(--body-font);
-            cursor: pointer;
-        }
-        .prompt-close:hover { color: var(--white); }
-        @keyframes prompt-in {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes prompt-mobile-in {
-            from { opacity: 0; transform: translate(-50%, calc(-50% + 10px)); }
-            to { opacity: 1; transform: translate(-50%, -50%); }
-        }
-
         @media (max-width: 760px) {
             .wrap { width: min(100% - 36px, 560px); }
             .nav { min-height: 68px; }
             .brand { font-size: 22px; }
-            .nav-links { gap: 14px; }
-            .nav-links a:not(.nav-cta) { display: none; }
-            .nav-cta { min-height: 40px; padding-inline: 12px; font-size: 12px; }
+            .menu-toggle { display: flex; }
+            .nav-links {
+                position: fixed;
+                top: 69px;
+                right: 0;
+                left: auto;
+                z-index: 21;
+                display: grid;
+                width: min(390px, calc(100vw - 24px));
+                height: calc(100dvh - 69px);
+                max-height: none;
+                grid-auto-rows: max-content;
+                align-items: stretch;
+                align-content: start;
+                gap: 0;
+                padding: 22px 24px calc(24px + env(safe-area-inset-bottom));
+                overflow-y: auto;
+                border: 1px solid rgba(255,255,255,0.1);
+                border-right: 0;
+                border-bottom-left-radius: 18px;
+                background:
+                    radial-gradient(circle at 100% 0, rgba(241,90,36,0.12), transparent 34%),
+                    linear-gradient(160deg, #1b1e1a 0%, #11130f 72%);
+                box-shadow: -24px 22px 60px rgba(0,0,0,0.42), inset 1px 0 rgba(255,255,255,0.04);
+                transform: translateX(102%);
+                visibility: hidden;
+                transition: transform 360ms cubic-bezier(.2,.8,.2,1), visibility 0s linear 360ms;
+            }
+            .nav-links.is-open { transform: translateX(0); visibility: visible; transition-delay: 0s; }
+            .nav-links a:not(.nav-cta) {
+                display: flex;
+                min-height: 54px;
+                align-items: center;
+                padding: 0 4px;
+                border-bottom: 1px solid rgba(255,255,255,0.09);
+                color: #f3f4f1;
+                font-size: 15px;
+                font-weight: 600;
+                letter-spacing: .02em;
+                transition: color 160ms ease, padding 160ms ease;
+            }
+            .nav-links a:not(.nav-cta):hover { padding-left: 10px; color: #ff8959; }
+            .nav-links .nav-cta { min-height: 48px; margin-top: 22px; border-radius: 12px; }
+            .menu-backdrop {
+                position: fixed;
+                inset: 69px 0 0;
+                z-index: 15;
+                display: block;
+                width: 100%;
+                height: calc(100dvh - 69px);
+                padding: 0;
+                border: 0;
+                background: rgba(5,7,5,.62);
+                opacity: 0;
+                pointer-events: none;
+                backdrop-filter: blur(3px);
+                transition: opacity 260ms ease;
+            }
+            .menu-backdrop[hidden] { display: none; }
+            .menu-backdrop.is-visible { opacity: 1; pointer-events: auto; }
             .hero-inner { min-height: auto; padding-block: 48px 46px; }
             .hero-heading-row { grid-template-columns: minmax(0, 1fr) minmax(128px, 34%); gap: 18px; }
             h1 { max-width: 540px; font-size: 54px; }
@@ -399,19 +652,17 @@
             body { height: 100dvh; }
             .topbar { height: 69px; }
             .nav { height: 68px; }
-            .nav-links { display: none; }
-            .app-stage { position: relative; height: calc(100dvh - 69px - 68px - env(safe-area-inset-bottom)); min-height: 0; overflow: hidden; }
+            .app-stage { position: relative; height: calc(100dvh - 69px - env(safe-area-inset-bottom)); min-height: 0; overflow: hidden; }
             .mobile-home { position: absolute; inset: 0; display: none; flex-direction: column; }
             .services, .contact { position: absolute; inset: 0; display: none; width: auto; max-width: none; margin: 0; overflow: hidden; }
             body[data-mobile-view="inicio"] .mobile-home { display: flex; }
             body[data-mobile-view="servicios"] #servicios { display: flex; flex-direction: column; }
-            body[data-mobile-view="contacto"] #contacto { display: block; }
+            body[data-mobile-view="contacto"] #contacto { display: block; overflow-y: auto; }
             .mobile-home .hero { flex: 1; min-height: 0; }
             .mobile-home .hero-inner { width: 100%; height: 100%; min-height: 0; align-content: center; margin: 0; padding: 16px 18px 20px; }
             .hero-description { margin-bottom: 14px; font-size: 13px; line-height: 1.45; }
             .hero-actions { gap: 8px; }
             .hero-actions .button { min-height: 40px; }
-            .hero-note { margin-top: 10px; }
             .device-strip { flex: 0 0 auto; }
             .device-list { width: 100%; min-height: 0; padding: 6px 12px; }
             .device-option { min-height: 36px; padding: 6px 4px; font-size: 17px; }
@@ -427,20 +678,77 @@
             .service-item:nth-child(3n + 2), .service-item:nth-child(3n) { padding-left: 0; border-left: 0; }
             .service-item:nth-child(even) { padding-left: 8px; border-left: 1px solid #bfc2ba; }
             .contact { padding: 22px 20px; }
-            .contact-inner { display: flex; height: 100%; flex-direction: column; justify-content: center; gap: 22px; padding: 0; }
+            .contact-inner { display: flex; height: auto; flex-direction: column; justify-content: center; gap: 22px; padding: 0; }
             .contact h2 { font-size: 40px; }
             .contact-copy > p:not(.eyebrow) { font-size: 13px; line-height: 1.5; }
             .contact-details { gap: 12px; }
             .contact-row { grid-template-columns: 76px minmax(0, 1fr); gap: 10px; padding-bottom: 12px; }
             .contact-value { font-size: 14px; }
             .contact-details .button { min-height: 42px; }
+            .nav-links .device-strip {
+                display: block;
+                margin-top: 21px;
+                padding: 14px 0 4px;
+                border-top: 1px solid rgba(255,255,255,0.12);
+                background: transparent;
+                box-shadow: none;
+                animation: none;
+            }
+            .device-menu-title {
+                margin: 0 0 8px;
+                color: #a8aaa4;
+                font-size: 10px;
+                font-weight: 700;
+                letter-spacing: .15em;
+                text-transform: uppercase;
+            }
+            .nav-links .device-list { width: 100%; grid-template-columns: 1fr; padding: 0; }
+            .nav-links .device-option,
+            .nav-links .device-option:nth-child(3) {
+                min-height: 44px;
+                justify-content: flex-start;
+                padding: 8px 3px;
+                border-right: 0;
+                border-bottom: 1px solid rgba(255,255,255,0.08);
+                color: #e5e6e2;
+                font: 600 14px var(--body-font);
+                letter-spacing: .01em;
+                text-align: left;
+            }
+            .nav-links .device-option::before {
+                width: 7px;
+                height: 7px;
+                flex: 0 0 auto;
+                margin-right: 12px;
+                border: 1px solid var(--orange);
+                border-radius: 50%;
+                content: "";
+            }
+            .nav-links .device-option:hover,
+            .nav-links .device-option:focus-visible { background: rgba(241,90,36,.08); color: var(--white); }
+            .nav-links .device-option:nth-child(n + 4) { border-top: 0; }
+            .nav-links .device-option:last-child { border-bottom: 0; }
+            .social-trigger {
+                top: auto;
+                right: auto;
+                bottom: calc(env(safe-area-inset-bottom) + 12px);
+                left: 12px;
+                width: 44px;
+                min-height: 44px;
+                justify-content: center;
+                padding: 0;
+                transform: none;
+            }
+            .social-trigger:hover { transform: translateY(-3px); }
+            .social-trigger-label { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+            .social-dialog { top: 50%; right: auto; left: 50%; width: min(350px, calc(100vw - 32px)); transform: translate(-50%, -50%); }
+            .social-dialog[open] { animation-name: social-dialog-mobile-in; }
+            .social-dialog-inner { padding: 22px; }
+            @keyframes social-dialog-mobile-in {
+                from { opacity: 0; transform: translate(-50%, calc(-50% + 10px)); }
+                to { opacity: 1; transform: translate(-50%, -50%); }
+            }
             footer { display: none; }
-            .mobile-tabs { position: fixed; right: 0; bottom: 0; left: 0; z-index: 12; display: grid; height: calc(68px + env(safe-area-inset-bottom)); grid-template-columns: repeat(3, minmax(0, 1fr)); padding-bottom: env(safe-area-inset-bottom); border-top: 1px solid #383b36; background: var(--ink); }
-            .mobile-tab { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 0; border-top: 3px solid transparent; background: transparent; color: #a8aaa4; font: 600 12px var(--body-font); cursor: pointer; }
-            .mobile-tab .ui-icon { width: 18px; height: 18px; }
-            .mobile-tab[aria-selected="true"] { border-top-color: var(--orange); color: var(--white); }
-            .mobile-tab:focus-visible { outline: 2px solid var(--orange); outline-offset: -4px; }
-            .contact-prompt { top: 50%; right: auto; bottom: auto; left: 50%; transform: translate(-50%, -50%); animation-name: prompt-mobile-in; }
         }
         @media (max-width: 420px) {
             .wrap { width: calc(100% - 30px); }
@@ -462,7 +770,6 @@
             .hero-description { margin-bottom: 10px; font-size: 12px; }
             .hero-actions { display: flex; flex-wrap: wrap; gap: 7px; }
             .hero-actions .button { min-height: 34px; padding-inline: 6px; font-size: 10px; }
-            .hero-note { margin-top: 6px; font-size: 11px; }
             .device-list { padding-block: 4px; }
             .device-option { min-height: 30px; padding: 5px 2px; font-size: 14px; }
             .repairs-dialog { max-height: 90dvh; }
@@ -472,10 +779,9 @@
             .repair-grid { grid-template-columns: 1fr; gap: 12px; }
             .repair-card-copy { padding: 12px 14px 14px; }
             .repair-card h3 { font-size: 23px; }
-            .contact-prompt { padding: 20px 48px 20px 18px; }
         }
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+            *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
         }
     </style>
 </head>
@@ -494,20 +800,39 @@
         <symbol id="icon-message" viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5Z"/></symbol>
         <symbol id="icon-mail" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></symbol>
         <symbol id="icon-close" viewBox="0 0 24 24"><path d="m18 6-12 12M6 6l12 12"/></symbol>
+        <symbol id="icon-share" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.7 10.7 6.6-4.4m-6.6 7 6.6 4.4"/></symbol>
     </svg>
     <header class="topbar">
         <nav class="nav wrap" aria-label="Navegación principal">
             <a class="brand" href="#inicio"><img class="brand-logo" src="assets/logo-reparaciones.svg" alt="" aria-hidden="true">Edwin lo repara</a>
-            <div class="nav-links">
+            <button class="menu-toggle" type="button" aria-label="Abrir menú" aria-controls="primary-links" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+            <div class="nav-links" id="primary-links">
                 <a href="#servicios">Servicios</a>
                 <a href="#contacto">Contacto</a>
-                <a class="nav-cta" href="https://wa.me/58412940920" target="_blank" rel="noopener noreferrer">Escríbeme</a>
+                <section class="device-strip" aria-label="Dispositivos atendidos">
+                    <p class="device-menu-title">Equipos y software</p>
+                    <div class="device-list">
+                        <button class="device-option" type="button" data-gallery-category="Móviles">Móviles</button>
+                        <button class="device-option" type="button" data-gallery-category="Tablets">Tablets</button>
+                        <button class="device-option" type="button" data-gallery-category="PC">PC</button>
+                        <button class="device-option" type="button" data-gallery-category="Consolas">Consolas</button>
+                        <button class="device-option" type="button" data-gallery-category="Software">Software</button>
+                    </div>
+                </section>
+                <a class="nav-cta" href="https://wa.me/584262189896" target="_blank" rel="noopener noreferrer">Escríbeme</a>
             </div>
         </nav>
     </header>
+    <button class="menu-backdrop" type="button" aria-label="Cerrar menú" hidden></button>
+    <button class="social-trigger" id="social-trigger" type="button" aria-label="Abrir redes sociales" aria-haspopup="dialog" aria-controls="social-dialog">
+        <svg class="ui-icon" aria-hidden="true"><use href="#icon-share"/></svg>
+        <span class="social-trigger-label">Redes</span>
+    </button>
 
     <main class="app-stage">
-        <div class="mobile-home" id="panel-inicio" role="tabpanel" aria-labelledby="tab-inicio">
+        <div class="mobile-home">
         <section class="hero" id="inicio" aria-labelledby="hero-title">
             <div class="hero-inner wrap">
                 <div class="hero-copy">
@@ -523,26 +848,16 @@
                     </div>
                     <p class="hero-description">Reparación y mantenimiento para tus móviles, tablets, PC y consolas. Cuéntame qué necesita tu equipo.</p>
                     <div class="hero-actions">
-                        <a class="button" href="https://wa.me/58412940920" target="_blank" rel="noopener noreferrer">Contactar por WhatsApp</a>
+                        <a class="button" href="https://wa.me/584262189896" target="_blank" rel="noopener noreferrer">Contactar por WhatsApp</a>
                         <a class="button button--outline" href="#servicios">Ver servicios</a>
                     </div>
-                    <p class="hero-note">Contacto directo: <strong>58-412940920</strong></p>
                 </div>
             </div>
         </section>
 
-        <section class="device-strip" aria-label="Dispositivos atendidos">
-            <div class="device-list wrap">
-                <button class="device-option" type="button" data-gallery-category="Móviles">Móviles</button>
-                <button class="device-option" type="button" data-gallery-category="Tablet">Tablet</button>
-                <button class="device-option" type="button" data-gallery-category="PC">PC</button>
-                <button class="device-option" type="button" data-gallery-category="Corneta">Corneta</button>
-                <button class="device-option" type="button" data-gallery-category="Consolas">Consolas</button>
-            </div>
-        </section>
         </div>
 
-        <section class="services wrap" id="servicios" role="tabpanel" aria-labelledby="tab-servicios">
+        <section class="services wrap" id="servicios">
             <div class="section-head">
                 <div>
                     <p class="eyebrow">Soluciones técnicas</p>
@@ -563,7 +878,7 @@
             </div>
         </section>
 
-        <section class="contact" id="contacto" role="tabpanel" aria-labelledby="tab-contacto">
+        <section class="contact" id="contacto">
             <div class="contact-inner wrap">
                 <div class="contact-copy">
                     <p class="eyebrow">Hablemos de tu equipo</p>
@@ -573,13 +888,13 @@
                 <div class="contact-details">
                     <div class="contact-row">
                         <span class="contact-label"><svg class="ui-icon" aria-hidden="true"><use href="#icon-message"/></svg>WhatsApp</span>
-                        <a class="contact-value" href="https://wa.me/58412940920" target="_blank" rel="noopener noreferrer">58-412940920</a>
+                        <a class="contact-value" href="https://wa.me/584262189896" target="_blank" rel="noopener noreferrer">0426-2189896</a>
                     </div>
                     <div class="contact-row">
                         <span class="contact-label"><svg class="ui-icon" aria-hidden="true"><use href="#icon-mail"/></svg>Correo</span>
                         <a class="contact-value" href="mailto:Ep310445@gmail.com">Ep310445@gmail.com</a>
                     </div>
-                    <a class="button" href="https://wa.me/58412940920" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>
+                    <a class="button" href="https://wa.me/584262189896" target="_blank" rel="noopener noreferrer">Escribir por WhatsApp</a>
                 </div>
             </div>
         </section>
@@ -598,117 +913,181 @@
         <div class="gallery-content" id="gallery-content" aria-live="polite"></div>
     </dialog>
 
+    <dialog class="social-dialog" id="social-dialog" aria-labelledby="social-title">
+        <div class="social-dialog-inner">
+            <div class="social-dialog-head">
+                <div>
+                    <p class="social-kicker">Conecta con Edwin</p>
+                    <h2 id="social-title">Redes sociales</h2>
+                </div>
+                <button class="social-close" type="button" aria-label="Cerrar redes sociales">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-close"/></svg>
+                </button>
+            </div>
+            <div class="social-list" aria-label="Perfiles sociales">
+                <a class="social-link" href="#" aria-label="Facebook, agrega aquí el enlace del perfil">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 21v-8h2.7l.4-3h-3.1V8.1c0-.9.3-1.5 1.6-1.5h1.7V3.9c-.3 0-1.3-.1-2.4-.1-2.4 0-4.1 1.5-4.1 4.2V10H7.5v3h2.8v8h3.2Z"/></svg>
+                    <span>Facebook</span>
+                </a>
+                <a class="social-link" href="#" aria-label="TikTok, agrega aquí el enlace del perfil">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.7 8.3a7.1 7.1 0 0 1-4.4-1.5v7.1a6.1 6.1 0 1 1-6.1-6.1c.4 0 .8 0 1.2.1v3.4a2.8 2.8 0 1 0 1.7 2.6V2.5h3.3c.3 2.4 2 4.2 4.3 4.6v1.2Z"/></svg>
+                    <span>TikTok</span>
+                </a>
+                <a class="social-link social-link--instagram" href="#" aria-label="Instagram, agrega aquí el enlace del perfil">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.7" cy="6.5" r=".8" fill="currentColor" stroke="none"/></svg>
+                    <span>Instagram</span>
+                </a>
+            </div>
+        </div>
+    </dialog>
+
     <footer>
         <div class="footer-inner wrap">
             <p>Edwin lo repara · Servicio técnico</p>
-            <p>Móviles · Tablet · PC · Consolas</p>
         </div>
     </footer>
 
-    <nav class="mobile-tabs" role="tablist" aria-label="Secciones">
-        <button class="mobile-tab" id="tab-inicio" type="button" role="tab" aria-controls="panel-inicio" aria-selected="true" tabindex="0" data-view="inicio"><svg class="ui-icon" aria-hidden="true"><use href="#icon-home"/></svg>Inicio</button>
-        <button class="mobile-tab" id="tab-servicios" type="button" role="tab" aria-controls="servicios" aria-selected="false" tabindex="-1" data-view="servicios"><svg class="ui-icon" aria-hidden="true"><use href="#icon-grid"/></svg>Servicios</button>
-        <button class="mobile-tab" id="tab-contacto" type="button" role="tab" aria-controls="contacto" aria-selected="false" tabindex="-1" data-view="contacto"><svg class="ui-icon" aria-hidden="true"><use href="#icon-message"/></svg>Contacto</button>
-    </nav>
-
-    <aside class="contact-prompt" id="contact-prompt" role="status" aria-live="polite" aria-labelledby="prompt-title" hidden>
-        <button class="prompt-close" type="button" aria-label="Cerrar aviso">Cerrar</button>
-        <h2 id="prompt-title">¿Necesitas ayuda?</h2>
-        <p>Cuéntame qué le pasa a tu equipo y te orientaré por WhatsApp.</p>
-        <a class="button" href="https://wa.me/58412940920" target="_blank" rel="noopener noreferrer">Consultar por WhatsApp</a>
-    </aside>
-
     <script>
-        const contactPrompt = document.querySelector("#contact-prompt");
-        const closePrompt = contactPrompt.querySelector(".prompt-close");
         const repairsDialog = document.querySelector("#repairs-dialog");
         const galleryContent = document.querySelector("#gallery-content");
         const galleryTitle = document.querySelector("#gallery-title");
         const closeGallery = repairsDialog.querySelector(".dialog-close");
+        const deviceStrip = document.querySelector(".device-strip");
+        const mobileHome = document.querySelector(".mobile-home");
+        const navLinks = document.querySelector("#primary-links");
+        const mobileLayout = window.matchMedia("(max-width: 760px)");
+        const menuToggle = document.querySelector(".menu-toggle");
+        const menuBackdrop = document.querySelector(".menu-backdrop");
+        const socialDialog = document.querySelector("#social-dialog");
+        const socialTrigger = document.querySelector("#social-trigger");
         const placeholderImage = "assets/reparacion-ilustrativa.svg";
-        const initialPromptDelay = 30 * 1000;
-        const promptRepeatDelay = 3 * 60 * 1000;
+        let backdropHideTimeout;
 
-        function showContactPrompt() {
-            contactPrompt.hidden = false;
-        }
-
-        closePrompt.addEventListener("click", () => {
-            contactPrompt.hidden = true;
-        });
+        const repairCatalog = [
+            {
+                category: "Móviles",
+                title: "Pantallas y vidrio",
+                description: "Cambio de vidrio, reparación de pantallas y diagnóstico de fallas para móviles Android y iPhone.",
+                image: placeholderImage
+            },
+            {
+                category: "Móviles",
+                title: "Baterías",
+                description: "Reemplazo de baterías, diagnóstico de consumo y revisión de carga para smartphones.",
+                image: placeholderImage
+            },
+            {
+                category: "Tablets",
+                title: "Tablets",
+                description: "Solución de pantallas, conectores, software y mantenimiento general para tablets.",
+                image: placeholderImage
+            },
+            {
+                category: "PC",
+                title: "PC y laptops",
+                description: "Formateo, limpieza, instalación de programas y revisión de rendimiento de computadoras.",
+                image: placeholderImage
+            },
+            {
+                category: "Consolas",
+                title: "Actualización de consolas",
+                description: "Actualizaciones de software, mantenimiento y ajustes para consolas de videojuegos.",
+                image: placeholderImage
+            },
+            {
+                category: "Software",
+                title: "Cuentas y software",
+                description: "Configuración de cuentas, desbloqueos, instalación de software y manejo de errores del sistema.",
+                image: placeholderImage
+            }
+        ];
 
         function normalizeText(value) {
-            return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
+            return String(value || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
         }
 
-        function parseRepairArticle(text, number) {
-            const fields = {};
-            const fieldNames = {
-                titulo: "title",
-                categoria: "category",
-                imagen: "image",
-                descripcion: "description"
-            };
-            let activeField = "";
+        function normalizeCategory(value) {
+            const category = normalizeText(value);
+            return category === "tablet" ? "tablets" : category;
+        }
 
-            text.split(/\r?\n/).forEach((line) => {
-                const match = line.match(/^\s*(t[ií]tulo|categor[ií]a|imagen|descripci[oó]n)\s*:\s*(.*)$/i);
-                if (match) {
-                    activeField = fieldNames[normalizeText(match[1])];
-                    fields[activeField] = match[2].trim();
-                } else if (activeField && line.trim()) {
-                    fields[activeField] = `${fields[activeField]} ${line.trim()}`.trim();
+        function parsePublishedRepair(content, number) {
+            const article = { title: "", category: "", image: "", description: "" };
+            let currentField = "";
+
+            content.replace(/\r/g, "").split("\n").forEach((line) => {
+                const fieldMatch = line.match(/^(Título|Categoria|Categoría|Imagen|Descripción):\s*(.*)$/i);
+                if (!fieldMatch) {
+                    if (currentField === "description") {
+                        article.description += `${article.description ? "\n" : ""}${line}`;
+                    }
+                    return;
                 }
+
+                currentField = normalizeText(fieldMatch[1]);
+                if (currentField === "titulo") article.title = fieldMatch[2].trim();
+                if (currentField === "categoria") article.category = fieldMatch[2].trim();
+                if (currentField === "imagen") article.image = fieldMatch[2].trim();
+                if (currentField === "descripcion") article.description = fieldMatch[2].trim();
             });
 
-            if (!fields.title || !fields.category || !fields.description) return null;
-            return { ...fields, number, image: fields.image || placeholderImage };
+            if (!article.title || !article.category || !article.description) {
+                throw new Error(`TXT/art_${number}.txt no contiene Título, Categoría y Descripción válidos.`);
+            }
+
+            return {
+                ...article,
+                image: article.image || placeholderImage
+            };
         }
 
-        let repairCatalogPromise;
-
-        function loadRepairCatalog() {
-            if (!repairCatalogPromise) {
-                repairCatalogPromise = (async () => {
-                    const articles = [];
-                    for (let number = 1; number <= 200; number += 1) {
-                        let response;
-                        try {
-                            response = await fetch(`TXT/art_${number}.txt`, { cache: "no-store" });
-                        } catch {
-                            break;
-                        }
-                        if (!response.ok) break;
-                        const article = parseRepairArticle(await response.text(), number);
-                        if (article) articles.push(article);
-                    }
-                    return articles;
-                })();
+        async function loadPublishedRepairs() {
+            const catalogResponse = await fetch("TXT/catalog.json", { cache: "no-store" });
+            if (catalogResponse.status === 404) return [];
+            if (!catalogResponse.ok) {
+                throw new Error(`No se pudo leer TXT/catalog.json (HTTP ${catalogResponse.status}).`);
             }
-            return repairCatalogPromise;
+
+            const catalog = await catalogResponse.json();
+            if (!catalog || !Array.isArray(catalog.articles) || catalog.articles.some((number) => !Number.isInteger(number) || number <= 0)) {
+                throw new Error("TXT/catalog.json debe contener una lista de números de artículos válidos.");
+            }
+
+            return Promise.all(catalog.articles.map(async (number) => {
+                const response = await fetch(`TXT/art_${number}.txt`, { cache: "no-store" });
+                if (!response.ok) {
+                    throw new Error(`No se pudo leer TXT/art_${number}.txt (HTTP ${response.status}).`);
+                }
+                return parsePublishedRepair(await response.text(), number);
+            }));
         }
 
         function createRepairCard(article) {
             const card = document.createElement("article");
             card.className = "repair-card";
+
             const image = document.createElement("img");
             image.className = "repair-image";
             image.src = article.image;
-            image.alt = `Imagen ilustrativa o fotografía de ${article.title}`;
+            image.alt = `Imagen ilustrativa de ${article.title}`;
             image.addEventListener("error", () => {
                 image.src = placeholderImage;
             }, { once: true });
 
             const copy = document.createElement("div");
             copy.className = "repair-card-copy";
+
             const category = document.createElement("p");
             category.className = "repair-category";
             category.textContent = article.category;
+
             const title = document.createElement("h3");
             title.textContent = article.title;
+
             const description = document.createElement("p");
             description.className = "repair-description";
             description.textContent = article.description;
+
             copy.append(category, title, description);
             card.append(image, copy);
             return card;
@@ -721,31 +1100,49 @@
             image.src = placeholderImage;
             image.alt = "Ilustración de un dispositivo en reparación";
             const message = document.createElement("p");
-            message.textContent = `Aún no hay reparaciones publicadas en ${category}.`;
+            message.textContent = `Aún no hay trabajos publicados en ${category}.`;
             empty.append(image, message);
             galleryContent.replaceChildren(empty);
         }
 
         async function openRepairGallery(category) {
             galleryTitle.textContent = category;
-            galleryContent.setAttribute("aria-busy", "true");
-            galleryContent.textContent = "Cargando trabajos...";
             repairsDialog.showModal();
 
-            const articles = await loadRepairCatalog();
-            const categoryKey = normalizeText(category);
-            const categoryArticles = articles.filter((article) => normalizeText(article.category) === categoryKey);
+            const loadingMessage = document.createElement("p");
+            loadingMessage.className = "gallery-status";
+            loadingMessage.textContent = "Cargando publicaciones…";
+            galleryContent.replaceChildren(loadingMessage);
+
+            let articles = repairCatalog;
+            try {
+                const publishedArticles = await loadPublishedRepairs();
+                if (publishedArticles.length) articles = publishedArticles;
+            } catch (error) {
+                console.error("No se pudieron cargar las publicaciones:", error);
+                const errorMessage = document.createElement("p");
+                errorMessage.className = "gallery-status";
+                errorMessage.textContent = `No se pudieron cargar las publicaciones. ${error.message}`;
+                galleryContent.replaceChildren(errorMessage);
+                return;
+            }
+
+            const categoryKey = normalizeCategory(category);
+            const categoryArticles = articles.filter((article) => normalizeCategory(article.category) === categoryKey);
             if (categoryArticles.length) {
                 galleryContent.replaceChildren(...categoryArticles.map(createRepairCard));
             } else {
                 showGalleryEmptyState(category);
             }
-            galleryContent.removeAttribute("aria-busy");
         }
 
         document.querySelectorAll(".device-option").forEach((option) => {
-            option.addEventListener("click", () => openRepairGallery(option.dataset.galleryCategory));
+            option.addEventListener("click", () => {
+                closeNavigationMenu();
+                openRepairGallery(option.dataset.galleryCategory);
+            });
         });
+
         closeGallery.addEventListener("click", () => repairsDialog.close());
         repairsDialog.addEventListener("keydown", (event) => {
             if (event.key === "Escape") repairsDialog.close();
@@ -754,27 +1151,73 @@
             if (event.target === repairsDialog) repairsDialog.close();
         });
 
-        const mobileTabs = [...document.querySelectorAll(".mobile-tab")];
+        socialTrigger.addEventListener("click", () => socialDialog.showModal());
+        socialDialog.querySelector(".social-close").addEventListener("click", () => socialDialog.close());
+        socialDialog.querySelectorAll('.social-link[href="#"]').forEach((link) => {
+            link.addEventListener("click", (event) => event.preventDefault());
+        });
+        socialDialog.addEventListener("click", (event) => {
+            if (event.target === socialDialog) socialDialog.close();
+        });
 
         function selectMobileView(view) {
             document.body.dataset.mobileView = view;
-            mobileTabs.forEach((tab) => {
-                const selected = tab.dataset.view === view;
-                tab.setAttribute("aria-selected", String(selected));
-                tab.tabIndex = selected ? 0 : -1;
-            });
         }
 
-        mobileTabs.forEach((tab, index) => {
-            tab.addEventListener("click", () => selectMobileView(tab.dataset.view));
-            tab.addEventListener("keydown", (event) => {
-                if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
-                event.preventDefault();
-                const direction = event.key === "ArrowRight" ? 1 : -1;
-                const nextTab = mobileTabs[(index + direction + mobileTabs.length) % mobileTabs.length];
-                selectMobileView(nextTab.dataset.view);
-                nextTab.focus();
+        function placeDeviceStrip() {
+            if (mobileLayout.matches) {
+                const contactLink = navLinks.querySelector('a[href="#contacto"]');
+                navLinks.insertBefore(deviceStrip, contactLink.nextSibling);
+            } else {
+                mobileHome.append(deviceStrip);
+                closeNavigationMenu();
+            }
+        }
+
+        placeDeviceStrip();
+        mobileLayout.addEventListener("change", placeDeviceStrip);
+
+        function closeNavigationMenu() {
+            window.clearTimeout(backdropHideTimeout);
+            navLinks.classList.remove("is-open");
+            menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "Abrir menú");
+            menuBackdrop.classList.remove("is-visible");
+            backdropHideTimeout = window.setTimeout(() => {
+                if (!navLinks.classList.contains("is-open")) menuBackdrop.hidden = true;
+            }, 260);
+        }
+
+        menuToggle.addEventListener("click", () => {
+            const isOpen = menuToggle.getAttribute("aria-expanded") === "true";
+            if (isOpen) {
+                closeNavigationMenu();
+                return;
+            }
+            window.clearTimeout(backdropHideTimeout);
+            menuBackdrop.hidden = false;
+            window.requestAnimationFrame(() => {
+                if (!menuBackdrop.hidden) menuBackdrop.classList.add("is-visible");
             });
+            navLinks.classList.add("is-open");
+            menuToggle.setAttribute("aria-expanded", "true");
+            menuToggle.setAttribute("aria-label", "Cerrar menú");
+        });
+
+        menuBackdrop.addEventListener("click", closeNavigationMenu);
+        navLinks.addEventListener("click", (event) => {
+            if (event.target.closest("a")) closeNavigationMenu();
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key !== "Escape") return;
+            if (socialDialog.open) {
+                socialDialog.close();
+                return;
+            }
+            if (menuToggle.getAttribute("aria-expanded") !== "true") return;
+            closeNavigationMenu();
+            menuToggle.focus();
         });
 
         document.querySelectorAll('a[href="#inicio"], a[href="#servicios"], a[href="#contacto"]').forEach((link) => {
@@ -787,10 +1230,6 @@
             });
         });
 
-        window.setTimeout(() => {
-            showContactPrompt();
-            window.setInterval(showContactPrompt, promptRepeatDelay);
-        }, initialPromptDelay);
     </script>
 </body>
 </html>
